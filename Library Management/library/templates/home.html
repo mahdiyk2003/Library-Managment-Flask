@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for book in posts.items %}
+        <article class="media content-section">
+          
+          <div class="media-body">
+            <img class="post-pics" src="{{ url_for('static', filename='books_pics/' + book.thumbnail) }}">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('book_posted', book_id=book.id) }}">{{ book.name }}</a>
+              <small class="text-muted">{{ book.published_at.strftime('%Y-%m-%d') }}</small>
+              <p>amount of left:{{book.quantity}}</p>
+            </div>
+            {% if book.description%}
+              <h2 class="article-content">{{ book.description }}</h2>
+            {% endif %}
+            <p class="article-content">The price of the book to borrow per month: <b>{{ book.price_per_month }}</b></p>
+            <p class="article-content"> <b>Book author</b> :<b>{{book.author}}</b> </p>
+          </div>
+        </article>
+    {% endfor %}
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if posts.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+{% endblock content %}
+{% block container %}
+{% if f_name and f_author and f_category and f_price%}
+<div class="content-section">
+  <form method="POST" action="" enctype="multipart/form-data">
+      {{ f_name.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Search book by name</legend>
+          <div class="form-group">
+              {{ f_name.name.label(class="form-control-label") }}
+              {% if f_name.name.errors %}
+                  {{ f_name.name(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in f_name.name.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ f_name.name(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="form-check">
+            {{ f_name.ability(class="form-check-input") }}
+            {{ f_name.ability.label(class="form-check-label") }}
+        </div>
+      </fieldset>
+      <div class="form-group">
+          {{ f_name.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+  <form method="POST" action="" enctype="multipart/form-data"></form>
+      {{ f_author.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Search book by author</legend>
+          <div class="form-group">
+              {{ f_author.author.label(class="form-control-label") }}
+              {% if f_author.author.errors %}
+                  {{ f_author.author(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in f_author.author.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ f_author.author(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="form-check">
+            {{ f_author.ability(class="form-check-input") }}
+            {{ f_author.ability.label(class="form-check-label") }}
+        </div>
+      </fieldset>
+      <div class="form-group">
+          {{ f_author.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+
+  <form method="POST" action="" enctype="multipart/form-data"></form>
+      {{ f_category.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Search book by author</legend>
+          <div class="form-group">
+              {{ f_category.category.label(class="form-control-label") }}
+              {% if f_category.category.errors %}
+                  {{ f_category.category(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in f_category.category.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ f_category.category(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="form-check">
+            {{ f_category.ability(class="form-check-input") }}
+            {{ f_category.ability.label(class="form-check-label") }}
+        </div>
+      </fieldset>
+      <div class="form-group">
+          {{ f_category.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+  <form method="POST" action="" enctype="multipart/form-data"></form>
+      {{ f_price.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Search book by author</legend>
+          <div class="form-group">
+              {{ f_price.MaxPrice.label(class="form-control-label") }}
+              {% if f_price.MaxPrice.errors %}
+                  {{ f_price.MaxPrice(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in f_price.MaxPrice.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ f_price.MaxPrice(class="form-control form-control-lg") }}
+              {% endif %}
+              {{ f_price.MinPrice.label(class="form-control-label") }}
+              {% if f_price.MinPrice.errors %}
+                  {{ f_price.MinPrice(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in f_price.MinPrice.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ f_price.MinPrice(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="form-check">
+            {{ f_price.ability(class="form-check-input") }}
+            {{ f_price.ability.label(class="form-check-label") }}
+        </div>
+      </fieldset>
+      <div class="form-group">
+          {{ f_price.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+</div>
+{%endif%}
+</div>
+{% endblock container %}
